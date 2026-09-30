@@ -1,10 +1,12 @@
 pipeline{
     agent any
+    tools{
+        nodejs 'nodejs'
+    }
     stages{
-        stage('checkout scm'){
+        stage('compile'){
             steps{
-                git branch: 'main', url: 'git@github.com:DevSecOps-Ltd/3-Tier-DevSecOps.git'
-                
+                sh 'npm run build'
             }
         }
     }
