@@ -16,7 +16,6 @@ pipeline{
            steps{
               dir('backend'){
                  sh 'npm ci'
-                 sh 'CI=false npm run build'
                 }
             }
        }
