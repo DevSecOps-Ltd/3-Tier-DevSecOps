@@ -4,19 +4,21 @@ pipeline{
         nodejs 'nodejs'
     }
     stages{
-        stage('compile'){
-            steps{
-                dir('frontend'){
-                    sh 'find . -name "*.js" -exec node {} +'
+        stage('Frontend Build') {
+           steps {
+              dir('frontend') {
+                 sh 'npm ci'
+                 sh 'npm run build'
                 }
             }
         }
-        stage('compile again'){
-            steps{
-                dir('backend'){
-                    sh 'find . -name "*.js" -exec node {} +'
+        stage('Frontend Build') {
+           steps {
+              dir('frontend') {
+                 sh 'npm ci'
+                 sh 'npm run build'
                 }
             }
-        }
+       }
     }
-}
+}    
