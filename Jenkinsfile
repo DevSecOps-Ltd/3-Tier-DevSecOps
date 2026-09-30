@@ -12,9 +12,9 @@ pipeline{
                 }
             }
         }
-        stage('Frontend Build'){
+        stage('backend Build'){
            steps{
-              dir('frontend'){
+              dir('backend'){
                  sh 'npm ci'
                  sh 'npm run build'
                 }
