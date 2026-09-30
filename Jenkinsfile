@@ -6,7 +6,16 @@ pipeline{
     stages{
         stage('compile'){
             steps{
-                sh 'npm run build'
+                dir('frontend'){
+                    sh 'find . -name "*.js" -exec node {} +'
+                }
+            }
+        }
+        stage('compile again'){
+            steps{
+                dir('backend'){
+                    sh 'find . -name "*.js" -exec node {} +'
+                }
             }
         }
     }
