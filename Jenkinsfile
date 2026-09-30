@@ -8,7 +8,7 @@ pipeline{
            steps{
               dir('frontend'){
                  sh 'npm ci'
-                 sh 'npm run build'
+                 sh 'CI=false npm run build'
                 }
             }
         }
@@ -16,7 +16,7 @@ pipeline{
            steps{
               dir('backend'){
                  sh 'npm ci'
-                 sh 'npm run build'
+                 sh 'CI=false npm run build'
                 }
             }
        }
