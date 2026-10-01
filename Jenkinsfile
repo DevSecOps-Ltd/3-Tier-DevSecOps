@@ -35,17 +35,17 @@ pipeline {
         }
 
         stage('SonarQube Analysis') {
-            steps {
-                withSonarQubeEnv('sonarqube') {
-                    sh '''
-                        sonar-scanner \
-                          -Dsonar.projectKey=3-tier-DevSecOps \
-                          -Dsonar.projectName=3-tier-DevSecOps \
-                          -Dsonar.sources=frontend/src,backend
-                    '''
-                }
+           steps {
+              withSonarQubeEnv('sonarqube') {
+              sh '''
+                sonar-scanner \
+                  -Dsonar.projectKey=3-tier-DevSecOps \
+                  -Dsonar.projectName=3-tier-DevSecOps \
+                  -Dsonar.sources=frontend/src,backend
+            '''
+               }
             }
-        }
+      }
 
         stage('Quality Gate') {
             steps {
@@ -54,12 +54,13 @@ pipeline {
                 }
             }
         }
-    }
+    
 
     post {
         success {
             archiveArtifacts artifacts: 'frontend/build/**',
                              fingerprint: true
-        }
+           }
+       }
     }
-}
+}    
