@@ -7,7 +7,7 @@ pipeline {
 
     tools {
         nodejs 'nodejs'
-        sonarQube 'sonar'
+        sonarRunner 'sonar'
 
     }
 
