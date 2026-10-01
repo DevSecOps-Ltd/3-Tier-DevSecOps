@@ -1,0 +1,6 @@
+[allowlist]
+description = "Ignore SonarQube project key false positive"
+
+regexes = [
+    '''-Dsonar\.projectKey=3-tier-DevSecOps'''
+]
