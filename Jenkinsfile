@@ -56,9 +56,9 @@ pipeline {
         }
     
 
-    post {
-        success {
-            archiveArtifacts artifacts: 'frontend/build/**',
+        post {
+          success {
+               archiveArtifacts artifacts: 'frontend/build/**',
                              fingerprint: true
            }
        }
