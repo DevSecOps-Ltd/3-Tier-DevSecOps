@@ -74,24 +74,26 @@ pipeline {
                 }
             }
         }
-    }
+    
         stage('docker build') {
             steps {
-                sh  '''docker build -t ${FRONTEND_IMAGE}:${IMAGE_TAG} .
-                       docker build -t ${BACKEND_IMAGE}:${IMAGE_TAG} .'''
+                sh  '''
+                     docker build -t ${FRONTEND_IMAGE}:${IMAGE_TAG} .
+                     docker build -t ${BACKEND_IMAGE}:${IMAGE_TAG} .
+                      
+                    '''
                   
                 }
             }
 
          stage('trivy scan') {
             steps {
-                sh  '''trivy image --exit-code 1 --severity HIGH,CRITICAL ${FRONTEND_IMAGE}:${IMAGE_TAG}
-                       trivy image --exit-code 1 --severity HIGH,CRITICAL ${BACKEND_IMAGE}:${IMAGE_TAG}'''
-                
-            }
-            
-        }   
-        
+                sh  '''
+                       trivy image --exit-code 1 --severity HIGH,CRITICAL ${FRONTEND_IMAGE}:${IMAGE_TAG}
+                       trivy image --exit-code 1 --severity HIGH,CRITICAL ${BACKEND_IMAGE}:${IMAGE_TAG}
+                    '''
+                }
+            }   
+        }
     }
-    
-}       
+          
