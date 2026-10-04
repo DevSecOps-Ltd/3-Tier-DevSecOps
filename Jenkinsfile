@@ -120,6 +120,23 @@ pipeline {
                 }
             }
 
+         stage('AWS Credential Test') {
+            steps {
+               withCredentials([[
+                     $class: 'AmazonWebServicesCredentialsBinding',
+                     credentialsId: 'aws-credentials'
+           ]]) {
+                   sh '''
+                       echo "AWS CLI:"
+                       aws --version
+
+                       echo "AWS identity:"
+                       aws sts get-caller-identity
+            '''
+             }
+        }
+    }   
+
          stage('ECR login') {
             steps {
                 withCredentials([[
