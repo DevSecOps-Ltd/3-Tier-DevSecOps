@@ -7,8 +7,6 @@ pipeline {
 
     tools {
         nodejs 'nodejs'
-        sonarRunner 'sonar'
-
     }
 
     stages {
