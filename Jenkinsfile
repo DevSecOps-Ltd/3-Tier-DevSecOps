@@ -78,8 +78,8 @@ pipeline {
         stage('docker build') {
             steps {
                 sh  '''
-                     docker build -t --no-cache ${FRONTEND_IMAGE} ./frontend
-                     docker build -t --no-cache ${BACKEND_IMAGE} ./backend
+                     docker build --no-cache -t${FRONTEND_IMAGE} ./frontend
+                     docker build --no-cache -t ${BACKEND_IMAGE} ./backend
                       
                     '''
                   
