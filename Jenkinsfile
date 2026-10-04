@@ -87,7 +87,11 @@ pipeline {
             steps {
                 sh  '''trivy image --exit-code 1 --severity HIGH,CRITICAL ${FRONTEND_IMAGE}:${IMAGE_TAG}
                        trivy image --exit-code 1 --severity HIGH,CRITICAL ${BACKEND_IMAGE}:${IMAGE_TAG}'''
-                }
-            }   
-        }
-    }    
+                
+            }
+            
+        }   
+        
+    }
+    
+}       
