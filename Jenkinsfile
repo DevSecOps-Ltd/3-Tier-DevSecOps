@@ -9,6 +9,20 @@ pipeline {
         nodejs 'nodejs'
     }
 
+    environment {
+        AWS_REGION = 'us-east-1'
+
+        ECR_REGISTRY = '463556655164.dkr.ecr.us-east-1.amazonaws.com'
+
+        ECR_REPOSITORY = 'three_tier_devsecops'
+
+        IMAGE_TAG = "${BUILD_NUMBER}"
+
+        FRONTEND_IMAGE = "${ECR_REGISTRY}/${ECR_REPOSITORY}:frontend-${IMAGE_TAG}"
+
+        BACKEND_IMAGE = "${ECR_REGISTRY}/${ECR_REPOSITORY}:backend-${IMAGE_TAG}"
+    }
+
     stages {
 
         stage('Gitleaks Scan') {
@@ -61,11 +75,19 @@ pipeline {
             }
         }
     }
+        stage('docker build') {
+            steps {
+                sh  '''docker build -t ${FRONTEND_IMAGE}:${IMAGE_TAG} .
+                       docker build -t ${BACKEND_IMAGE}:${IMAGE_TAG} .'''
+                  
+                }
+            }
 
-    post {
-        success {
-            archiveArtifacts artifacts: 'frontend/build/**',
-                             fingerprint: true
+         stage('trivy scan') {
+            steps {
+                sh  '''trivy image --exit-code 1 --severity HIGH,CRITICAL ${FRONTEND_IMAGE}:${IMAGE_TAG}
+                       trivy image --exit-code 1 --severity HIGH,CRITICAL ${BACKEND_IMAGE}:${IMAGE_TAG}'''
+                }
+            }   
         }
-    }
-}
+    }    
