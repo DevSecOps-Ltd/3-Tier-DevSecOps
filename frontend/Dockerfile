@@ -1,5 +1,7 @@
 # Stage 1: Build React App
-FROM node:18-alpine AS build
+FROM node:22-alpine
+
+RUN apk update && apk upgrade
 
 WORKDIR /app
 COPY package*.json ./
