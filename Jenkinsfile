@@ -78,8 +78,8 @@ pipeline {
         stage('docker build') {
             steps {
                 sh  '''
-                     docker build -t ${FRONTEND_IMAGE}:${IMAGE_TAG} ./frontend
-                     docker build -t ${BACKEND_IMAGE}:${IMAGE_TAG} ./backend
+                     docker build -t ${FRONTEND_IMAGE} ./frontend
+                     docker build -t ${BACKEND_IMAGE} ./backend
                       
                     '''
                   
