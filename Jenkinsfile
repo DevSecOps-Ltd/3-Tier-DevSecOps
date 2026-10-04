@@ -21,6 +21,8 @@ pipeline {
         FRONTEND_IMAGE = "${ECR_REGISTRY}/${ECR_REPOSITORY}:frontend-${IMAGE_TAG}"
 
         BACKEND_IMAGE = "${ECR_REGISTRY}/${ECR_REPOSITORY}:backend-${IMAGE_TAG}"
+
+        ECR_IMAGE = "${ECR_REGISTRY}/${ECR_REPOSITORY}:${IMAGE_TAG}"
     }
 
     stages {
@@ -74,6 +76,20 @@ pipeline {
                 }
             }
         }
+
+        stage('Docker Local Cleanup') {
+            steps {
+            sh '''
+            echo "Removing local Docker image..."
+
+            docker rmi ${FRONTEND_IMAGE}:${IMAGE_TAG} || true
+            docker rmi ${BACKEND_IMAGE}:${IMAGE_TAG} || true
+            docker rmi ${ECR_IMAGE} || true
+
+            docker image prune -f
+        '''
+           }
+        }
     
         stage('docker build') {
             steps {
@@ -93,7 +109,34 @@ pipeline {
                        trivy image --exit-code 1 --severity HIGH,CRITICAL ${BACKEND_IMAGE}
                     '''
                 }
-            }   
+            } 
+         stage('docker push') {
+            steps {
+                sh  '''
+                     aws ecr get-login-password --region ${AWS_REGION} | docker login --username AWS --password-stdin ${ECR_REGISTRY}
+                     docker push ${FRONTEND_IMAGE}
+                     docker push ${BACKEND_IMAGE}
+                    '''
+                }
+            }
+
+         stage('ECR login'){
+            steps{
+                script{
+                    sh 'aws ecr get-login-password --region ${AWS_REGION} | docker login --username AWS --password-stdin ${ECR_REGISTRY}'
+                }
+            }
         }
+        stage('docker push to ECR'){
+            steps{
+                script{
+                    sh 'docker tag ${FRONTEND_IMAGE}:${IMAGE_TAG} ${ECR_IMAGE}'
+                    sh 'docker tag ${BACKEND_IMAGE}:${IMAGE_TAG} ${ECR_IMAGE}'
+                    sh 'docker push ${ECR_IMAGE}'
+                }
+            }
+        }        
     }
+    
+}
           
