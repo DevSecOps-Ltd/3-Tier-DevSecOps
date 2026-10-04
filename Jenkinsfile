@@ -37,12 +37,16 @@ pipeline {
         stage('SonarQube Analysis') {
             steps {
                 withSonarQubeEnv('sonarqube') {
+                    script {
+                        def scannerHome = tool 'sonar'
+
                     sh '''
                         sonar-scanner \
                             -Dsonar.projectKey=3-tier-DevSecOps \
                             -Dsonar.projectName=3-tier-DevSecOps \
                             -Dsonar.sources=frontend/src,backend
                     '''
+                    }
                 }
             }
         }
