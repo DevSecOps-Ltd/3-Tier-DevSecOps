@@ -88,19 +88,6 @@ pipeline {
             }
         }
 
-        stage('Docker Local Cleanup') {
-            steps {
-                sh '''
-                    echo "Removing old local Docker images..."
-
-                    docker rmi ${FRONTEND_IMAGE} || true
-                    docker rmi ${BACKEND_IMAGE} || true
-
-                    docker image prune -f
-                '''
-            }
-        }
-
         stage('Docker Build') {
             steps {
                 sh '''
