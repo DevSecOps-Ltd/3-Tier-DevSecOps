@@ -171,21 +171,27 @@ pipeline {
                 '''
             }
         }
+
+        stage('Helm Deployment') {
+            steps {
+                sh '''
+                    echo "Deploying application using Helm..."
+
+                    helm upgrade --install three-tier-devsecops ./helm \
+                        --set frontend.image.repository=${ECR_REGISTRY}/${ECR_REPOSITORY} \
+                        --set frontend.image.tag=frontend-${IMAGE_TAG} \
+                        --set backend.image.repository=${ECR_REGISTRY}/${ECR_REPOSITORY} \
+                        --set backend.image.tag=backend-${IMAGE_TAG} \
+                        --set mysql.image.repository=mysql \
+                        --set mysql.image.tag=8.0 \
+                        --set mysql.auth.rootPassword=secretpassword \
+                        --set mysql.auth.database=appdb \
+                        --set mysql.auth.username=appuser \
+                        --set mysql.auth.password=apppassword
+
+                '''
+            }
+        }
     }
 
-    post {
-        success {
-            echo 'Pipeline completed successfully!'
-        }
-
-        failure {
-            echo 'Pipeline failed. Check the stage logs above.'
-        }
-
-        always {
-            echo "Build Number: ${BUILD_NUMBER}"
-            echo "Frontend Image: ${FRONTEND_IMAGE}"
-            echo "Backend Image: ${BACKEND_IMAGE}"
-        }
-    }
 }
