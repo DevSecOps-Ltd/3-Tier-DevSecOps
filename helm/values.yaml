@@ -12,12 +12,11 @@ frontend:
     imagePullPolicy: Always
     tag: frontend-51
 
+  containerPort: 80  
   service:
     type: LoadBalancer
-    ports:
-      - name: http
-        containerPort: 80
-        protocol: TCP
+    port: 80
+    targetPort: 80
 
 backend:
   replicaCount: 1
@@ -26,13 +25,11 @@ backend:
     imagePullPolicy: Always
     tag: backend-51
 
+  containerPort: 8080
   service:
-    type: ClusterIP
-    ports:
-      - name: http
-        containerPort: 8080
-        protocol: TCP
-    
+    type: LoadBalancer
+    port: 8080
+    targetPort: 8080
 
 mysql:
   image:
