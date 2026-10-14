@@ -25,11 +25,11 @@ backend:
     imagePullPolicy: Always
     tag: backend-51
 
-  containerPort: 8080
+  containerPort: 5000
   service:
     type: LoadBalancer
-    port: 8080
-    targetPort: 8080
+    port: 5000
+    targetPort: 5000
 
 mysql:
   image:
