@@ -33,17 +33,16 @@ spec:
         {{- toYaml . | nindent 8 }}
       {{- end }}
       containers:
-        - name: {{ .Chart.Name }}
+        - name: frontend
           {{- with .Values.securityContext }}
           securityContext:
             {{- toYaml . | nindent 12 }}
           {{- end }}
           image: "{{ .Values.frontend.image.repository }}:{{ .Values.frontend.image.tag }}"
-          imagePullPolicy: {{ .Values.frontend.image.pullPolicy }}
+          imagePullPolicy: {{ .Values.frontend.image.imagePullPolicy }}
           ports:
             - name: http
-              port: {{ .Values.frontend.service.port }}
-              containerPort: {{ .Values.frontend.service.containerPort }}
+              containerPort: {{ .Values.frontend.containerPort }}
               protocol: TCP
           {{- with .Values.livenessProbe }}
           livenessProbe:
