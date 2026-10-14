@@ -172,26 +172,59 @@ pipeline {
             }
         }
 
+        stage('Configure EKS') {
+           steps {
+               sh '''
+                   echo "Updating EKS kubeconfig..."
+
+                   aws eks update-kubeconfig \
+                   --region ${AWS_REGION} \
+                   --name three-tier-devsecops
+
+                   echo "Checking EKS connection..."
+
+                   kubectl get nodes
+           '''
+        }
+    }
+
         stage('Helm Deployment') {
             steps {
                 sh '''
                     echo "Deploying application using Helm..."
 
                     helm upgrade --install three-tier-devsecops ./helm \
+                        --namespace three-tier-devsecops \
+                        --create-namespace \
                         --set frontend.image.repository=${ECR_REGISTRY}/${ECR_REPOSITORY} \
                         --set frontend.image.tag=frontend-${IMAGE_TAG} \
                         --set backend.image.repository=${ECR_REGISTRY}/${ECR_REPOSITORY} \
                         --set backend.image.tag=backend-${IMAGE_TAG} \
                         --set mysql.image.repository=mysql \
                         --set mysql.image.tag=8.0 \
-                        --set mysql.auth.rootPassword=secretpassword \
-                        --set mysql.auth.database=appdb \
-                        --set mysql.auth.username=appuser \
-                        --set mysql.auth.password=apppassword
-
+                        --wait \
+                        --timeout 5m
                 '''
             }
         }
+
+        stage('Verify Deployment') {
+           steps {
+              sh '''
+               echo "Checking namespace..."
+               kubectl get namespace three-tier-devsecops
+
+               echo "Checking pods..."
+               kubectl get pods -n three-tier-devsecops
+
+               echo "Checking services..."
+               kubectl get svc -n three-tier-devsecops
+
+               echo "Checking deployment rollout..."
+               kubectl get deployments -n three-tier-devsecops
+        '''
+           }
+       }
     }
 
 }
