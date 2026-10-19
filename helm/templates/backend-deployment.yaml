@@ -11,11 +11,15 @@ spec:
   {{- end }}
   selector:
     matchLabels:
-      {{- include "helm.backendSelectorLabels" . | nindent 6 }}
+      app.kubernetes.io/instance: {{ .Release.Name }}
+      app.kubernetes.io/name: {{ include "helm.name" . }}
+      app.kubernetes.io/component: backend
   template:
     metadata:
       labels:
-        {{- include "helm.backendSelectorLabels" . | nindent 8 }}
+        app.kubernetes.io/instance: {{ .Release.Name }}
+        app.kubernetes.io/name: {{ include "helm.name" . }}
+        app.kubernetes.io/component: backend
         helm.sh/chart: {{ include "helm.chart" . }}
         app.kubernetes.io/managed-by: {{ .Release.Service }}
         {{- if .Chart.AppVersion }}

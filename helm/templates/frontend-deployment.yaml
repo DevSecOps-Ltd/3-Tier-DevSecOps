@@ -11,11 +11,15 @@ spec:
   {{- end }}
   selector:
     matchLabels:
-      {{- include "helm.frontendSelectorLabels" . | nindent 6 }}
+      app.kubernetes.io/instance: {{ .Release.Name }}
+      app.kubernetes.io/name: {{ include "helm.name" . }}
+      app.kubernetes.io/component: frontend
   template:
     metadata:
       labels:
-        {{- include "helm.frontendSelectorLabels" . | nindent 8 }}
+        app.kubernetes.io/instance: {{ .Release.Name }}
+        app.kubernetes.io/name: {{ include "helm.name" . }}
+        app.kubernetes.io/component: frontend
         helm.sh/chart: {{ include "helm.chart" . }}
         app.kubernetes.io/managed-by: {{ .Release.Service }}
         {{- if .Chart.AppVersion }}
@@ -57,28 +61,4 @@ spec:
           {{- with .Values.frontend.resources }}
           resources:
             {{- toYaml . | nindent 12 }}
-          {{- end }}
-          {{- with .Values.frontend.env }}
-          env:
-            {{- toYaml . | nindent 12 }}
-          {{- end }}
-          {{- with .Values.frontend.volumeMounts }}
-          volumeMounts:
-            {{- toYaml . | nindent 12 }}
-          {{- end }}
-      {{- with .Values.frontend.volumes }}
-      volumes:
-        {{- toYaml . | nindent 8 }}
-      {{- end }}
-      {{- with .Values.nodeSelector }}
-      nodeSelector:
-        {{- toYaml . | nindent 8 }}
-      {{- end }}
-      {{- with .Values.affinity }}
-      affinity:
-        {{- toYaml . | nindent 8 }}
-      {{- end }}
-      {{- with .Values.tolerations }}
-      tolerations:
-        {{- toYaml . | nindent 8 }}
-      {{- end }}
+          {{- end }}  
