@@ -41,7 +41,7 @@ spec:
           image: "{{ .Values.backend.image.repository }}:{{ .Values.backend.image.tag }}"
           imagePullPolicy: {{ .Values.backend.image.imagePullPolicy }}
           ports:
-            - name: http
+            - name: backend-http
               containerPort: {{ .Values.backend.containerPort }}
               protocol: TCP
           {{- with .Values.livenessProbe }}

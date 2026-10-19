@@ -41,7 +41,7 @@ spec:
           image: "{{ .Values.frontend.image.repository }}:{{ .Values.frontend.image.tag }}"
           imagePullPolicy: {{ .Values.frontend.image.imagePullPolicy }}
           ports:
-            - name: http
+            - name: frontend-http
               containerPort: {{ .Values.frontend.containerPort }}
               protocol: TCP
           {{- with .Values.livenessProbe }}
