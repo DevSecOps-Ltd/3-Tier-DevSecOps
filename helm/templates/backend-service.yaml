@@ -4,12 +4,13 @@ metadata:
   name: backend-service
   labels:
     {{- include "helm.labels" . | nindent 4 }}
+    app.kubernetes.io/component: backend
 spec:
   type: {{ .Values.backend.service.type }}
   ports:
-    - port: {{ .Values.backend.service.port }}
-      targetPort: {{ .Values.backend.service.targetPort }}
+    - name: http
+      port: {{ .Values.backend.service.port }}
+      targetPort: backend-http
       protocol: TCP
-      name: http
   selector:
-    {{- include "helm.selectorLabels" . | nindent 4 }}
+    {{- include "helm.backendSelectorLabels" . | nindent 4 }}
