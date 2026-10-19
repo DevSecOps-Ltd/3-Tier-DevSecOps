@@ -45,46 +45,57 @@ spec:
         - name: backend
           image: "{{ .Values.backend.image.repository }}:{{ .Values.backend.image.tag }}"
           imagePullPolicy: {{ .Values.backend.image.imagePullPolicy | default "IfNotPresent" }}
+
           ports:
             - name: backend-http
               containerPort: {{ .Values.backend.containerPort | default 5000 }}
               protocol: TCP
+
           {{- with .Values.backend.livenessProbe }}
           livenessProbe:
             {{- toYaml . | nindent 12 }}
           {{- end }}
+
           {{- with .Values.backend.readinessProbe }}
           readinessProbe:
             {{- toYaml . | nindent 12 }}
           {{- end }}
+
           {{- with .Values.backend.resources }}
           resources:
             {{- toYaml . | nindent 12 }}
           {{- end }}
+
           {{- with .Values.backend.env }}
           env:
             {{- toYaml . | nindent 12 }}
           {{- end }}
+
           {{- with .Values.backend.envFrom }}
           envFrom:
             {{- toYaml . | nindent 12 }}
           {{- end }}
+
           {{- with .Values.backend.volumeMounts }}
           volumeMounts:
             {{- toYaml . | nindent 12 }}
           {{- end }}
+
       {{- with .Values.backend.volumes }}
       volumes:
         {{- toYaml . | nindent 8 }}
       {{- end }}
+
       {{- with .Values.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}
       {{- end }}
+
       {{- with .Values.affinity }}
       affinity:
         {{- toYaml . | nindent 8 }}
       {{- end }}
+
       {{- with .Values.tolerations }}
       tolerations:
         {{- toYaml . | nindent 8 }}
