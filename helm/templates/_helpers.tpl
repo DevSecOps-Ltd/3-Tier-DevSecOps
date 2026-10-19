@@ -44,20 +44,26 @@ app.kubernetes.io/managed-by: {{ .Release.Service }}
 
 {{/*
 Selector labels
-*/}}
+{{/* Common selector labels */}}
+{{- define "helm.selectorLabels" -}}
+app.kubernetes.io/name: {{ include "helm.name" . }}
+app.kubernetes.io/instance: {{ .Release.Name }}
+{{- end }}
+
+{{/* Frontend selector labels */}}
 {{- define "helm.frontendSelectorLabels" -}}
 app.kubernetes.io/name: {{ include "helm.name" . }}
 app.kubernetes.io/instance: {{ .Release.Name }}
 app.kubernetes.io/component: frontend
 {{- end }}
 
+{{/* Backend selector labels */}}
 {{- define "helm.backendSelectorLabels" -}}
 app.kubernetes.io/name: {{ include "helm.name" . }}
 app.kubernetes.io/instance: {{ .Release.Name }}
 app.kubernetes.io/component: backend
 {{- end }}
 
-{{/*    
 Create the name of the service account to use
 */}}
 {{- define "helm.serviceAccountName" -}}
