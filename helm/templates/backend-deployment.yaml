@@ -50,6 +50,18 @@ spec:
             - name: backend-http
               containerPort: {{ .Values.backend.containerPort | default 5000 }}
               protocol: TCP
+          env:
+            - name: DB_HOST
+              value: {{ .Values.database.host | quote }}
+            - name: DB_USER
+              value: {{ .Values.database.user | quote }}
+            - name: DB_NAME
+              value: {{ .Values.database.name | quote }}
+            - name: DB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: mysql-secret
+                  key: MYSQL_PASSWORD    
 
           {{- with .Values.backend.livenessProbe }}
           livenessProbe:
